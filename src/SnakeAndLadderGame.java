@@ -50,20 +50,23 @@ public class SnakeAndLadderGame {
 		System.out.println("Ladder Position : "+ladderPosition);
 		
 		String[] snakeArr = snakePosition.split(" ");
-		int snakeEndPoint = Integer.parseInt(snakeArr[1]);
-		int snakeStartPoint = Integer.parseInt(snakeArr[2]);
-		String snakeHungerLevel = snakeArr[3];
+		Snake snake = new Snake();
+		snake.setSnakeStartPoint(Integer.parseInt(snakeArr[1]));
+		snake.setSnakeEndPoint(Integer.parseInt(snakeArr[1]));
+		snake.setSnakeHungerLevel(snakeArr[3]);
 		
-		System.out.println("Snake Starting Point :- "+snakeStartPoint);
-		System.out.println("Snake Ending Point :- "+snakeEndPoint);
-		System.out.println("Snake Hunger Level :- "+snakeHungerLevel);
+		
+		System.out.println("Snake Starting Point :- "+snake.getSnakeStartPoint());
+		System.out.println("Snake Ending Point :- "+snake.getSnakeEndPoint());
+		System.out.println("Snake Hunger Level :- "+snake.getSnakeHungerLevel());
 		
 		String[] ladderArr = ladderPosition.split(" ");
-		int ladderBase = Integer.parseInt(ladderArr[1]);
-		int ladderTop = Integer.parseInt(ladderArr[2]);
+		Ladder ladder = new Ladder();
+		ladder.setLadderBase(Integer.parseInt(ladderArr[1]));
+		ladder.setLadderTop(Integer.parseInt(ladderArr[2]));
 		
-		System.out.println("Ladder Base :- "+ladderBase);
-		System.out.println("Ladder Top :- "+ladderTop);
+		System.out.println("Ladder Base :- "+ladder.getLadderBase());
+		System.out.println("Ladder Top :- "+ladder.getLadderTop());
 		
 		System.out.println("[1:1], [2:1]");
 		int player1Position = 1;
@@ -74,13 +77,13 @@ public class SnakeAndLadderGame {
 			System.out.print ("Dice Throw for Player 1 : "); 
 			int pDice1 = Integer.parseInt(playerDice1.readLine());
 			player1Position = player1Position + pDice1;
-			if(player1Position==snakeStartPoint)
+			if(player1Position==snake.getSnakeStartPoint())
 			{
-				player1Position = snakeEndPoint;
+				player1Position = snake.getSnakeEndPoint();
 			}
-			else if(player1Position == ladderBase)
+			else if(player1Position == ladder.getLadderBase())
 			{
-				player1Position = ladderTop;
+				player1Position = ladder.getLadderTop();
 			}
 			if(player1Position > noOfSquares)
 			{
@@ -96,13 +99,13 @@ public class SnakeAndLadderGame {
 			BufferedReader playerDice2 = new BufferedReader (new InputStreamReader (System.in));
 			int pDice2 = Integer.parseInt(playerDice2.readLine());
 			player2Position = player2Position + pDice2;
-			if(player2Position==snakeStartPoint)
+			if(player2Position==snake.getSnakeStartPoint())
 			{
-				player2Position = snakeEndPoint;
+				player2Position = snake.getSnakeEndPoint();
 			}
-			else if(player2Position == ladderBase)
+			else if(player2Position == ladder.getLadderBase())
 			{
-				player2Position = ladderTop;
+				player2Position = ladder.getLadderTop();
 			}
 			if(player2Position > noOfSquares)
 			{
