@@ -2,8 +2,8 @@ package main.java;
 
 public class Ladder {
 	
-	int ladderBase;
-	int ladderTop;
+	private int ladderBase;
+	private int ladderTop;
 	
 	public int getLadderBase() {
 		return ladderBase;

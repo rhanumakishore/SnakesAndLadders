@@ -2,9 +2,9 @@ package main.java;
 
 public class Snake {
 	
-	int snakeStartPoint;
-	int snakeEndPoint;
-	String snakeHungerLevel;
+	private int snakeStartPoint;
+	private int snakeEndPoint;
+	private String snakeHungerLevel;
 	
 	
 	public int getSnakeStartPoint() {
