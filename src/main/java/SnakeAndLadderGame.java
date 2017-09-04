@@ -116,22 +116,42 @@ public class SnakeAndLadderGame {
 			int pDice1 = Integer.parseInt(playerDice1.readLine());
 			player1Position = player1Position + pDice1;
 			
-			Iterator snakeIterator1 = snakes.iterator();
-			while(snakeIterator1.hasNext())
+			if(constructs.getTrampolines().contains(player1Position))
 			{
-				Snake snake = (Snake) snakeIterator1.next();
-				if(player1Position == snake.getSnakeStartPoint())
+				int newPosition = player1Position + pDice1;
+				if(newPosition < constructs.getNoOfSquares())
 				{
-					player1Position = snake.getSnakeEndPoint();
+					player1Position = newPosition;
 				}
 			}
-			Iterator ladderIterator1 = ladders.iterator();
-			while(ladderIterator1.hasNext())
+			else if(constructs.getElevators().contains(player1Position))
 			{
-				Ladder ladder = (Ladder) ladderIterator1.next();
-				if(player1Position == ladder.getLadderBase())
+				int newPosition = player1Position + (pDice1 * 4);
+				if(newPosition < constructs.getNoOfSquares())
 				{
-					player1Position = ladder.getLadderTop();
+					player1Position = newPosition;
+				}
+			}
+			else
+			{
+			
+				Iterator snakeIterator1 = snakes.iterator();
+				while(snakeIterator1.hasNext())
+				{
+					Snake snake = (Snake) snakeIterator1.next();
+					if(player1Position == snake.getSnakeStartPoint())
+					{
+						player1Position = snake.getSnakeEndPoint();
+					}
+				}
+				Iterator ladderIterator1 = ladders.iterator();
+				while(ladderIterator1.hasNext())
+				{
+					Ladder ladder = (Ladder) ladderIterator1.next();
+					if(player1Position == ladder.getLadderBase())
+					{
+						player1Position = ladder.getLadderTop();
+					}
 				}
 			}
 			
@@ -150,22 +170,41 @@ public class SnakeAndLadderGame {
 			int pDice2 = Integer.parseInt(playerDice2.readLine());
 			player2Position = player2Position + pDice2;
 			
-			Iterator snakeIterator2 = snakes.iterator();
-			while(snakeIterator2.hasNext())
+			if(constructs.getTrampolines().contains(player2Position))
 			{
-				Snake snake = (Snake) snakeIterator2.next();
-				if(player2Position == snake.getSnakeStartPoint())
+				int newPosition = player2Position + pDice2;
+				if(newPosition < constructs.getNoOfSquares())
 				{
-					player2Position = snake.getSnakeEndPoint();
+					player2Position = newPosition;
 				}
 			}
-			Iterator ladderIterator2 = ladders.iterator();
-			while(ladderIterator2.hasNext())
+			else if(constructs.getElevators().contains(player2Position))
 			{
-				Ladder ladder = (Ladder) ladderIterator2.next();
-				if(player2Position == ladder.getLadderBase())
+				int newPosition = player2Position + (pDice2 * 4);
+				if(newPosition < constructs.getNoOfSquares())
 				{
-					player2Position = ladder.getLadderTop();
+					player2Position = newPosition;
+				}
+			}
+			else
+			{
+				Iterator snakeIterator2 = snakes.iterator();
+				while(snakeIterator2.hasNext())
+				{
+					Snake snake = (Snake) snakeIterator2.next();
+					if(player2Position == snake.getSnakeStartPoint())
+					{
+						player2Position = snake.getSnakeEndPoint();
+					}
+				}
+				Iterator ladderIterator2 = ladders.iterator();
+				while(ladderIterator2.hasNext())
+				{
+					Ladder ladder = (Ladder) ladderIterator2.next();
+					if(player2Position == ladder.getLadderBase())
+					{
+						player2Position = ladder.getLadderTop();
+					}
 				}
 			}
 			
