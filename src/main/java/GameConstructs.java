@@ -12,6 +12,8 @@ public class GameConstructs {
 	private List<Integer> pitstops = new ArrayList<Integer>();
 	private List<Integer> magicSquares = new ArrayList<Integer>();
 	private List<Integer> memorySquares = new ArrayList<Integer>();
+	private List<Snake> snakeList = new ArrayList<Snake>();
+	private List<Ladder> ladderList = new ArrayList<Ladder>();
 	
 	
 	public int getNoOfSquares() {
@@ -56,6 +58,18 @@ public class GameConstructs {
 	}
 	public void setMemorySquares(List<Integer> memorySquares) {
 		this.memorySquares = memorySquares;
+	}
+	public List<Snake> getSnakeList() {
+		return snakeList;
+	}
+	public void setSnakeList(List<Snake> snakeList) {
+		this.snakeList = snakeList;
+	}
+	public List<Ladder> getLadderList() {
+		return ladderList;
+	}
+	public void setLadderList(List<Ladder> ladderList) {
+		this.ladderList = ladderList;
 	}
 	
 	
