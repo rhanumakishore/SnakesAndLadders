@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -113,6 +114,8 @@ public class SnakeAndLadderGame {
 		int player2Position = 1;
 		boolean isMagicPlayEnabledForPlayer1 = false;
 		boolean isMagicPlayEnabledForPlayer2 = false;
+		List<Integer> player1Turns = new LinkedList<Integer>();
+		List<Integer> player2Turns = new LinkedList<Integer>();
 		do
 		{
 			BufferedReader playerDice1 = new BufferedReader (new InputStreamReader (System.in));
@@ -120,15 +123,29 @@ public class SnakeAndLadderGame {
 			int pDice1 = Integer.parseInt(playerDice1.readLine());
 			player1Position = player1Position + pDice1;
 			
+			if(constructs.getMemorySquares().contains(player1Position))
+			{
+				if(pDice1 < player1Turns.size())
+				{
+					player1Position = player1Turns.get(pDice1 - 1);
+				}
+				else
+				{
+					player1Position = 1;
+				}
+			}
+			
 			if(constructs.getMagicSquares().contains(player1Position))
 			{
 				if(isMagicPlayEnabledForPlayer1)
 				{
 					isMagicPlayEnabledForPlayer1 = false;
+					System.out.println("Magic Play disabled for Player 1");
 				}
 				else
 				{
 					isMagicPlayEnabledForPlayer1 = true;
+					System.out.println("Magic Play enabled for Player 1");
 				}
 			}
 			
@@ -144,21 +161,36 @@ public class SnakeAndLadderGame {
 				System.out.println("**********Player 1 WON**************");
 				break;
 			}
+			player1Turns.add(player1Position);
 			System.out.println("[2:"+player2Position+"],[1:"+player1Position+"]");
 			System.out.print ("Dice Throw for Player 2 : "); 
 			BufferedReader playerDice2 = new BufferedReader (new InputStreamReader (System.in));
 			int pDice2 = Integer.parseInt(playerDice2.readLine());
 			player2Position = player2Position + pDice2;
 			
+			if(constructs.getMemorySquares().contains(player2Position))
+			{
+				if(pDice2 < player2Turns.size())
+				{
+					player2Position = player2Turns.get(pDice2 - 1);
+				}
+				else
+				{
+					player2Position = 1;
+				}
+			}
+			
 			if(constructs.getMagicSquares().contains(player2Position))
 			{
 				if(isMagicPlayEnabledForPlayer2)
 				{
 					isMagicPlayEnabledForPlayer2 = false;
+					System.out.println("Magic Play disabled for Player 2");
 				}
 				else
 				{
 					isMagicPlayEnabledForPlayer2 = true;
+					System.out.println("Magic Play enabled for Player 2");
 				}
 			}
 			player2Position = computePlayerPosition(constructs, player2Position, pDice2, isMagicPlayEnabledForPlayer2);
@@ -172,6 +204,7 @@ public class SnakeAndLadderGame {
 				System.out.println("**********Player 2 WON***************");
 				break;
 			}
+			player2Turns.add(player2Position);
 			System.out.println("[1:"+player1Position+"],[2:"+player2Position+"]");
 		}while(player1Position <= constructs.getNoOfSquares() || player2Position <= constructs.getNoOfSquares());
 		
@@ -238,28 +271,26 @@ public class SnakeAndLadderGame {
 				playerPosition = newPosition;
 			}
 		}
-		else
-		{
 		
-			Iterator snakeIterator = constructs.getSnakeList().iterator();
-			while(snakeIterator.hasNext())
+		Iterator snakeIterator = constructs.getSnakeList().iterator();
+		while (snakeIterator.hasNext()) 
+		{
+			Snake snake = (Snake) snakeIterator.next();
+			if (playerPosition == snake.getSnakeStartPoint()) 
 			{
-				Snake snake = (Snake) snakeIterator.next();
-				if(playerPosition == snake.getSnakeStartPoint())
-				{
-					playerPosition = snake.getSnakeEndPoint();
-				}
-			}
-			Iterator ladderIterator = constructs.getLadderList().iterator();
-			while(ladderIterator.hasNext())
-			{
-				Ladder ladder = (Ladder) ladderIterator.next();
-				if(playerPosition == ladder.getLadderBase())
-				{
-					playerPosition = ladder.getLadderTop();
-				}
+				playerPosition = snake.getSnakeEndPoint();
 			}
 		}
+		Iterator ladderIterator = constructs.getLadderList().iterator();
+		while (ladderIterator.hasNext()) 
+		{
+			Ladder ladder = (Ladder) ladderIterator.next();
+			if (playerPosition == ladder.getLadderBase()) 
+			{
+				playerPosition = ladder.getLadderTop();
+			}
+		}
+		
 		return playerPosition;
 	}
 
@@ -277,27 +308,26 @@ public class SnakeAndLadderGame {
 				playerPosition = 1;
 			}
 		}
-		else
+		
+		Iterator snakeIterator = constructs.getSnakeList().iterator();
+		while (snakeIterator.hasNext()) 
 		{
-			Iterator snakeIterator = constructs.getSnakeList().iterator();
-			while(snakeIterator.hasNext())
+			Snake snake = (Snake) snakeIterator.next();
+			if (playerPosition == snake.getSnakeEndPoint()) 
 			{
-				Snake snake = (Snake) snakeIterator.next();
-				if(playerPosition == snake.getSnakeEndPoint())
-				{
-					playerPosition = snake.getSnakeStartPoint();
-				}
-			}
-			Iterator ladderIterator = constructs.getLadderList().iterator();
-			while(ladderIterator.hasNext())
-			{
-				Ladder ladder = (Ladder) ladderIterator.next();
-				if(playerPosition == ladder.getLadderTop())
-				{
-					playerPosition = ladder.getLadderBase();
-				}
+				playerPosition = snake.getSnakeStartPoint();
 			}
 		}
+		Iterator ladderIterator = constructs.getLadderList().iterator();
+		while (ladderIterator.hasNext()) 
+		{
+			Ladder ladder = (Ladder) ladderIterator.next();
+			if (playerPosition == ladder.getLadderTop()) 
+			{
+				playerPosition = ladder.getLadderBase();
+			}
+		}
+		
 		return playerPosition;
 	}
 
