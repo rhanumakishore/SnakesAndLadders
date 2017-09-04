@@ -111,6 +111,8 @@ public class SnakeAndLadderGame {
 		System.out.println("[1:1], [2:1]");
 		int player1Position = 1;
 		int player2Position = 1;
+		boolean isMagicPlayEnabledForPlayer1 = false;
+		boolean isMagicPlayEnabledForPlayer2 = false;
 		do
 		{
 			BufferedReader playerDice1 = new BufferedReader (new InputStreamReader (System.in));
@@ -120,10 +122,18 @@ public class SnakeAndLadderGame {
 			
 			if(constructs.getMagicSquares().contains(player1Position))
 			{
-				//magic constructs logic should go here
+				if(isMagicPlayEnabledForPlayer1)
+				{
+					isMagicPlayEnabledForPlayer1 = false;
+				}
+				else
+				{
+					isMagicPlayEnabledForPlayer1 = true;
+				}
 			}
 			
-			player1Position = computePlayerPosition(constructs, player1Position, pDice1);
+			player1Position = computePlayerPosition(constructs, player1Position, pDice1, isMagicPlayEnabledForPlayer1);
+			
 			
 			if(player1Position > constructs.getNoOfSquares())
 			{
@@ -140,7 +150,18 @@ public class SnakeAndLadderGame {
 			int pDice2 = Integer.parseInt(playerDice2.readLine());
 			player2Position = player2Position + pDice2;
 			
-			player2Position = computePlayerPosition(constructs, player2Position, pDice2);
+			if(constructs.getMagicSquares().contains(player2Position))
+			{
+				if(isMagicPlayEnabledForPlayer2)
+				{
+					isMagicPlayEnabledForPlayer2 = false;
+				}
+				else
+				{
+					isMagicPlayEnabledForPlayer2 = true;
+				}
+			}
+			player2Position = computePlayerPosition(constructs, player2Position, pDice2, isMagicPlayEnabledForPlayer2);
 			
 			if(player2Position > constructs.getNoOfSquares())
 			{
@@ -188,46 +209,96 @@ public class SnakeAndLadderGame {
 		
 	}
 
-	private static int computePlayerPosition(GameConstructs constructs, int player1Position, int pDice1) {
-		if(constructs.getTrampolines().contains(player1Position))
+	private static int computePlayerPosition(GameConstructs constructs, int playerPosition, int pDice, boolean isMagicPlayEnabled) {
+		if(isMagicPlayEnabled)
 		{
-			int newPosition = player1Position + pDice1;
+			playerPosition = computePlayerMagicPosition(constructs, playerPosition, pDice);
+		}
+		else
+		{
+			playerPosition = computePlayerNormalPosition(constructs, playerPosition, pDice);
+		}
+		return playerPosition;
+	}
+
+	private static int computePlayerNormalPosition(GameConstructs constructs, int playerPosition, int pDice) {
+		if(constructs.getTrampolines().contains(playerPosition))
+		{
+			int newPosition = playerPosition + pDice;
 			if(newPosition < constructs.getNoOfSquares())
 			{
-				player1Position = newPosition;
+				playerPosition = newPosition;
 			}
 		}
-		else if(constructs.getElevators().contains(player1Position))
+		else if(constructs.getElevators().contains(playerPosition))
 		{
-			int newPosition = player1Position + (pDice1 * 4);
+			int newPosition = playerPosition + (pDice * 4);
 			if(newPosition < constructs.getNoOfSquares())
 			{
-				player1Position = newPosition;
+				playerPosition = newPosition;
 			}
 		}
 		else
 		{
 		
-			Iterator snakeIterator1 = constructs.getSnakeList().iterator();
-			while(snakeIterator1.hasNext())
+			Iterator snakeIterator = constructs.getSnakeList().iterator();
+			while(snakeIterator.hasNext())
 			{
-				Snake snake = (Snake) snakeIterator1.next();
-				if(player1Position == snake.getSnakeStartPoint())
+				Snake snake = (Snake) snakeIterator.next();
+				if(playerPosition == snake.getSnakeStartPoint())
 				{
-					player1Position = snake.getSnakeEndPoint();
+					playerPosition = snake.getSnakeEndPoint();
 				}
 			}
-			Iterator ladderIterator1 = constructs.getLadderList().iterator();
-			while(ladderIterator1.hasNext())
+			Iterator ladderIterator = constructs.getLadderList().iterator();
+			while(ladderIterator.hasNext())
 			{
-				Ladder ladder = (Ladder) ladderIterator1.next();
-				if(player1Position == ladder.getLadderBase())
+				Ladder ladder = (Ladder) ladderIterator.next();
+				if(playerPosition == ladder.getLadderBase())
 				{
-					player1Position = ladder.getLadderTop();
+					playerPosition = ladder.getLadderTop();
 				}
 			}
 		}
-		return player1Position;
+		return playerPosition;
+	}
+
+	private static int computePlayerMagicPosition(GameConstructs constructs, int playerPosition, int pDice) {
+		if(constructs.getTrampolines().contains(playerPosition))
+		{
+			playerPosition = playerPosition - pDice;
+			
+		}
+		else if(constructs.getElevators().contains(playerPosition))
+		{
+			playerPosition = playerPosition - (pDice * 4);
+			if(playerPosition < 1)
+			{
+				playerPosition = 1;
+			}
+		}
+		else
+		{
+			Iterator snakeIterator = constructs.getSnakeList().iterator();
+			while(snakeIterator.hasNext())
+			{
+				Snake snake = (Snake) snakeIterator.next();
+				if(playerPosition == snake.getSnakeEndPoint())
+				{
+					playerPosition = snake.getSnakeStartPoint();
+				}
+			}
+			Iterator ladderIterator = constructs.getLadderList().iterator();
+			while(ladderIterator.hasNext())
+			{
+				Ladder ladder = (Ladder) ladderIterator.next();
+				if(playerPosition == ladder.getLadderTop())
+				{
+					playerPosition = ladder.getLadderBase();
+				}
+			}
+		}
+		return playerPosition;
 	}
 
 	private static List<String> getBoardConfiguration() {
