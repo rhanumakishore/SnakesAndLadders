@@ -240,7 +240,7 @@ public class Game {
 		}*/
 	}
 	
-	private int computePlayerPosition(GameConstructs constructs, int playerPosition, int pDice, boolean isMagicPlayEnabled) {
+	public int computePlayerPosition(GameConstructs constructs, int playerPosition, int pDice, boolean isMagicPlayEnabled) {
 		if(isMagicPlayEnabled)
 		{
 			playerPosition = computePlayerMagicPosition(constructs, playerPosition, pDice);
